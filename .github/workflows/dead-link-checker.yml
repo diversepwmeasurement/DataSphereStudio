@@ -1,20 +1,18 @@
-name: Link checker
-
-on:
-  pull_request:
-  push:
-  schedule:
-    - cron: "0 5 * * *"
-
 jobs:
   CheckDeadLinks:
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
+    runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v3
-      - uses: gaurav-nelson/github-action-markdown-link-check@v1
-        with:
-          use-quiet-mode: 'no'
-          use-verbose-mode: 'yes'
-          folder-path: '../'
-          config-file: '.github/workflows/dlc.json'
+    - continue-on-error: true
+      uses: actions/checkout@v3
+    - continue-on-error: true
+      uses: gaurav-nelson/github-action-markdown-link-check@v1
+      with:
+        config-file: .github/workflows/dlc.json
+        folder-path: ../
+        use-quiet-mode: no
+        use-verbose-mode: yes
+    timeout-minutes: 60
+name: Link checker
+on:
+  repository_dispatch:
+    types: trigger-ga___dead-link-checker.yml
